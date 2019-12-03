@@ -524,5 +524,9 @@ input {
     padding: 37px 30px;
     padding-bottom: 45px;
   }
-  
+  .captch{
+    width: 100px;
+    height: 100px;
+    background-color: #ccc;
+  }
 }
