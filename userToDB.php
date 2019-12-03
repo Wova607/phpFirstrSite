@@ -1,7 +1,6 @@
 <?php
 include_once "connect_db.php";
-if(isset($_POST["register"]))
-{
+
 $name=$_POST['name'];
 $surname=$_POST['surname'];
 $birdthdaytext =$_POST['birthday'];
@@ -26,4 +25,3 @@ $isql->execute([$name, $surname, $birdthday, $email, $phone, $login, $password])
 
 header("Location: /index.php");
 exit;
-}
