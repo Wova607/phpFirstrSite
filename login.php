@@ -1,29 +1,48 @@
 <?php
 session_start();
 include_once "_header.php";
+include_once "func.php";
 
-$_SESSION['bad_capt']="style='display:none;'";
-$_SESSION['bad_login']="style='display:none;'";
+
+//$_SESSION['bad_login_count']=0;
+if (!isset($_SESSION['bad_login_count']))
+{
+  $_SESSION['bad_login_count']=0;
+  $_SESSION['bad_login']="style='display:none;'";
+  $_SESSION['bad_capt']="style='display:none;'";
+}
 
 if(isset($_POST["loginBTN"]))
 {
-   if(isset($_SESSION['login_count']))
-{
-  
-}
-
-
-
-  {
-  $_SESSION['bad_login']='';
-  }
-   if($_SESSION['login_count']>5 & $_POST["captchaText"]!= $_SESSION['captText'])
-    {
-        $_SESSION['bad_capt']='';
-     
+  $_SESSION['bad_capt']="style='display:none;'";
+  if($_SESSION['bad_login_count']>=5 & $_POST["captchaText"]!= $_SESSION['captText'])
+    {      
+      $_SESSION['bad_capt']='';  
+        exit;
     }
+    
+
+    if(!loginUser($_POST['login'],$_POST['password']));
+        {
+            if($_SESSION['bad_login_count']>=5)
+             {
+              $_SESSION['bad_login']='';
+             }
+        }
 
 }
+// if(isset($_POST["loginBTN"]) & $_SESSION['bad_login']!="style='display:none;'")
+// {
+
+//   if($_SESSION['bad_login']!="style='display:none;'" & $_POST["captchaText"]!= $_SESSION['captText'])
+//   {
+//       $_SESSION['bad_capt']='';
+//       exit;
+//   }
+
+
+// }  
+  
 ?>
 <br>
 
