@@ -1,28 +1,50 @@
 <?php
 include_once "_header.php";
 session_start();
+
 $_SESSION['bad_login']="style='display:none;'";
 $_SESSION['bad_capt']="style='display:none;'";
+$_SESSION['bad_user']="style='display:none;'";
+$refreshClick='';
+
+if(isset($_POST["refresh"]))
+ {
+   $refreshClick="onClick = document.getElementById('captcha').src = 'captcha.php'";
+   $_SESSION['bad_login']='';
+ }
+
 if(isset($_POST["loginBTN"]))
  {
-   include_once "func.php";
-  if(!loginUser($_POST['login'],$_POST['password']));
-      {
-         if($_SESSION['bad_login_count']>=5)
-         {
-          $_SESSION['bad_login']='';
-             if($_SESSION['captText']!=$_POST["captchaText"] & $_SESSION['bad_login_count']>5)
-              {
-               $_SESSION['bad_capt']='';
-              }else{
-                $_SESSION['bad_capt']="style='display:none;'";
-              }
-         }
-         else{
-          $_SESSION['bad_login']="style='display:none;'";
-         }
-      }
- }
+    if(!isset($_SESSION['bad_login_count']))
+    {
+      $_SESSION['bad_login_count']=0;
+    }
+
+    include_once "func.php";
+    if(loginUser($_POST['login'], $_POST['password']))
+      {         
+         header("Location: /about.php");
+         exit;
+      } 
+     else{
+      $_SESSION['bad_login_count']++;
+      
+     }
+
+     if($_SESSION['bad_login_count']>=5)
+     {
+      $_SESSION['bad_login']='';
+     }    
+  }
+
+  if(count($_POST)!=0)
+  {
+   $l =$_POST['login'];
+  }
+  else{
+   $l ='';
+  }
+   
   
 ?>
 <br>
@@ -37,14 +59,15 @@ if(isset($_POST["loginBTN"]))
         <form method="POST">                
                         
                 <div class="input-group">
-                  <input class="input--style-3" type="text" placeholder="Login" name="login" required>
+                <div class="alert alert-danger" role="alert" <?php echo $_SESSION['bad_user'] ?>>Wrong login or password!</div>
+                  <input class="input--style-3" type="text" placeholder="Login" name="login" required <?php echo "value=$l" ?>>
                 </div>
                 <div class="input-group">
                   <input class="input--style-3" type="password" placeholder="Password" name="password" required>
                 </div> 
 
               <div <?php echo $_SESSION['bad_login'] ?>>
-                <div> <img name="captcha" src=captcha.php> &nbsp; <button onClick ="document.getElementById('captcha').src = 'captcha.php'" name="refresh"><img  src=/icon/refresh.png width="30" height="30"></button> </div>
+                <div> <img name="captcha" src=captcha.php> &nbsp; <button <?php echo $refreshClick ?> name="refresh"><img  src=/icon/refresh.png width="30" height="30"></button> </div>
                     
                         <div class="input-group">
                             <input class="input--style-3" type="text" placeholder="Text from img" name="captchaText" require>
@@ -69,5 +92,6 @@ if(isset($_POST["loginBTN"]))
   </div> 
 
 </div>
+
 <?php
 include_once "_footer.php";
