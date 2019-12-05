@@ -1,47 +1,28 @@
 <?php
-session_start();
 include_once "_header.php";
-include_once "func.php";
-
-
-//$_SESSION['bad_login_count']=0;
-if (!isset($_SESSION['bad_login_count']))
-{
-  $_SESSION['bad_login_count']=0;
-  $_SESSION['bad_login']="style='display:none;'";
-  $_SESSION['bad_capt']="style='display:none;'";
-}
-
+session_start();
+$_SESSION['bad_login']="style='display:none;'";
+$_SESSION['bad_capt']="style='display:none;'";
 if(isset($_POST["loginBTN"]))
-{
-  $_SESSION['bad_capt']="style='display:none;'";
-  if($_SESSION['bad_login_count']>=5 & $_POST["captchaText"]!= $_SESSION['captText'])
-    {      
-      $_SESSION['bad_capt']='';  
-        exit;
-    }
-    
-
-    if(!loginUser($_POST['login'],$_POST['password']));
-        {
-            if($_SESSION['bad_login_count']>=5)
-             {
-              $_SESSION['bad_login']='';
-             }
-        }
-
-}
-// if(isset($_POST["loginBTN"]) & $_SESSION['bad_login']!="style='display:none;'")
-// {
-
-//   if($_SESSION['bad_login']!="style='display:none;'" & $_POST["captchaText"]!= $_SESSION['captText'])
-//   {
-//       $_SESSION['bad_capt']='';
-//       exit;
-//   }
-
-
-// }  
+ {
+   include_once "func.php";
+  if(!loginUser($_POST['login'],$_POST['password']));
+      {
+         if($_SESSION['bad_login_count']>=5)
+         {
+          $_SESSION['bad_login']='';
+             if($_SESSION['captText']!=$_POST["captchaText"] & $_SESSION['bad_login_count']>5)
+              {
+               $_SESSION['bad_capt']='';
+              }else{
+                $_SESSION['bad_capt']="style='display:none;'";
+              }
+         }
+         else{
+          $_SESSION['bad_login']="style='display:none;'";
+         }
+      }
+ }
   
 ?>
 <br>
@@ -63,10 +44,10 @@ if(isset($_POST["loginBTN"]))
                 </div> 
 
               <div <?php echo $_SESSION['bad_login'] ?>>
-                <div> <img name="captcha" src=captcha.php> &nbsp; <a href="#" name="refresh"><img  src=/icon/refresh.png width="30" height="30"></a> </div>
+                <div> <img name="captcha" src=captcha.php> &nbsp; <button onClick ="document.getElementById('captcha').src = 'captcha.php'" name="refresh"><img  src=/icon/refresh.png width="30" height="30"></button> </div>
                     
                         <div class="input-group">
-                            <input class="input--style-3" type="text" placeholder="Text from img" name="captchaText">
+                            <input class="input--style-3" type="text" placeholder="Text from img" name="captchaText" require>
                         </div>
                     
                         <div class="alert alert-danger" role="alert" <?php echo $_SESSION['bad_capt'] ?>>Wrong text!</div>
@@ -88,7 +69,5 @@ if(isset($_POST["loginBTN"]))
   </div> 
 
 </div>
-
 <?php
 include_once "_footer.php";
-?>
