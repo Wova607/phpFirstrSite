@@ -5,7 +5,9 @@ $name=$_POST['name'];
 $surname=$_POST['surname'];
 
 $birdthdaytext =$_POST['birthday'];
-$birdthday=prepstr($birdthdaytext);
+
+include_once "func.php";
+$birdthday=prepdate($birdthdaytext);
 
 $email =$_POST['email'];
 $phone =$_POST['phone'];
@@ -13,15 +15,7 @@ $city =$_POST['city'];
 $login =$_POST['login'];
 $password= password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-function prepstr($str)
-{
-$newstr=substr($str,strlen($str)-4,5);
-$newstr.="-";
-$newstr.=substr($str,strlen($str)-7,2);
-$newstr.="-";
-$newstr.=substr($str,strlen($str)-10,2);
-return $newstr;
-}
+
 
 
 try{

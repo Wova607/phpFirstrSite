@@ -1,4 +1,13 @@
 <?php
+function prepdate($str)
+{
+$newstr=substr($str,strlen($str)-4,5);
+$newstr.="-";
+$newstr.=substr($str,strlen($str)-7,2);
+$newstr.="-";
+$newstr.=substr($str,strlen($str)-10,2);
+return $newstr;
+}
 
 function loginUser($login,$pas)
  {
@@ -13,7 +22,6 @@ function loginUser($login,$pas)
   try{
     $sql = "SELECT * FROM `tbl_user` WHERE Login = '$login'";
      $isql = $dbh->prepare($sql);
-     //$userPas=$isql->execute([$login, $pas]);
      $isql->execute();
      $res = $isql->fetch(PDO::FETCH_ASSOC);
      $id=$res['Id'];
@@ -38,50 +46,37 @@ function loginUser($login,$pas)
    }
   
   
-
-
-
-   //include_once "connect_db.php";
-   
-
-
-  //  if($pas=="123")
-  //  {
-  //      $_SESSION['bad_login_count']=0;
-  //      return true;
-  //  }else{
-  //      $_SESSION['bad_login_count']++;
-  //      return false;
-  //  }
+   function AnimalsFromDB()
+   {
+    $id=$_SESSION['login_User'];
+    include_once "connect_db.php";
+    try{
+     $sql = "SELECT * FROM `tbl_animals` WHERE UserId = '$id'";
+     $isql = $dbh->prepare($sql);
+     $isql->execute();
+     $animals = $isql->fetch(PDO::FETCH_ASSOC);
+        
+      }catch (PDOException $e) {
+         echo 'У даного користувача тварин не знайдено в базі: ' . $e->getMessage();
+         die();
+     }
+     return $animals;
+   }
  
-// function loginUser($login,$pas)
-// {
-// //include_once "connect_db.php";
-// $pas= password_hash($pas, PASSWORD_DEFAULT);
+   function AddAnimal($kind, $breed, $name, $birdthday, $photo)
+   {
+    $id=$_SESSION['login_User'];
+    include_once "connect_db.php";
+    try{
+     $sql = "INSERT INTO tbl_animals(Kind, Breed, Name, Birdthday, Photo, UserId) VALUES (?, ?, ?, ?, ?, ?)";
+     $isql = $dbh->prepare($sql);
+     $isql->execute([$kind, $breed, $name, $birdthday, $photo, $id]);
+            
+      }catch (PDOException $e) {
+         echo 'Тварину не додано в базу: ' . $e->getMessage();
+         die();
+     }
+     return $animals;
+   }
 
-// // try{
-// //     $sql = "SELECT Id FROM `tbl_user` WHERE (login='$login' AND Password='$pas')";
-// //     $isql = $dbh->prepare($sql);
-// //     $isql->execute();
-// //     $res = $isql->fetch(PDO::FETCH_ASSOC);
-// //     $id=$res['Id'];
-// //    // $userPas=$isql->execute([$login, $pas]);
-// //     }catch (PDOException $e) {
-// //         echo 'Запис не додано в базу: ' . $e->getMessage();
-// //         die();
-// //     }
-// $id=null;
-// if($id==null)
-// {
-//   //  $_SESSION['bad_login_count']++;
-//     return false;
-// }else{
-//    // $_SESSION['bad_login_count']=0;
-//     return true;
-// }
-
-
-
-
-// }
 ?>

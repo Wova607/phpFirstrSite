@@ -23,7 +23,7 @@ if(isset($_POST["loginBTN"]))
     include_once "func.php";
     if(loginUser($_POST['login'], $_POST['password']))
       {         
-         header("Location: /about.php");
+         header("Location: /animalsList.php");
          exit;
       } 
      else{
@@ -57,7 +57,7 @@ if(isset($_POST["loginBTN"]))
       <h2 class="title" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login</h2>
            
         <form method="POST">                
-                        
+               <div class="container">         
                 <div class="input-group">
                 <div class="alert alert-danger" role="alert" <?php echo $_SESSION['bad_user'] ?>>Wrong login or password!</div>
                   <input class="input--style-3" type="text" placeholder="Login" name="login" required <?php echo "value=$l" ?>>
@@ -85,7 +85,7 @@ if(isset($_POST["loginBTN"]))
                           </div> 
                         </div>
                       </div>
-          
+          </div>
         </form>
         
     </div>

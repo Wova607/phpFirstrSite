@@ -27,7 +27,7 @@
                 <li><a href="login.php" class="text-white">Login</a></li>
                 <li><a href="registration.php" class="text-white">Registration</a></li>
                 <li><a href="UserProfile.php" class="text-white">User Profile</a></li>
-                <li><a href="about.php" class="text-white">About</a></li>
+                <li><a href="animalsList.php" class="text-white">Animals</a></li>
               </ul>
             </div>
           </div>
