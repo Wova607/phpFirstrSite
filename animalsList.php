@@ -54,12 +54,40 @@ $animalslist[]=AnimalsFromDB();
 </div>
 
 </div>
-<div class="page-wrapper  font-poppins">
-  <div class="wrapper wrapper--w780">
+<div class="page-wrapper  font-poppins container">
+  <!-- <div class="wrapper wrapper--w780"> -->
     <div class="card card-3">          
       <h2 class="title" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Animals</h2>
+      <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Photo</th>
+                <th scope="col">Name</th>
+                <th scope="col">Breed</th>
+                <th scope="col">Birthdate</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            if(count($animalslist)==0)
+            {
+           echo '
+        <tr>
+            <th scope="row">1</th>
+            <td><img src='. $animalslist["Photo"].'></td>
+            <td>' . $animalslist["Name"] . '</td>
+            <td>' . $animalslist["Bread"] . '</td>
+            <td>' . $animalslist["DateBirdth"] . '</td>
+        </tr>
+        ';}
+            
+            ?>
+
+            </tbody>
+        </table>
+
     </div>
-  </div>
+  <!-- </div> -->
 </div>
 <?php
 include "_footer.php";
