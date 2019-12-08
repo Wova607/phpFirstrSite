@@ -8,28 +8,28 @@ function loginUser($login,$pas)
     $_SESSION['bad_capt']='';
     return false;
   }
-  //$pas= password_hash($pas, PASSWORD_DEFAULT);
-  //include_once "connect_db.php";
-  // try{
- //     $sql = "SELECT * FROM `tbl_user` WHERE (login='$login' AND Password='$pas')";
-//      $isql = $dbh->prepare($sql);
-       //$userPas=$isql->execute([$login, $pas]);
- //     $isql->execute();
- //     $res = $isql->fetch(PDO::FETCH_ASSOC);
- //     $id=$res['Id'];
- //   
- //     }catch (PDOException $e) {
- //         echo 'Запис не додано в базу: ' . $e->getMessage();
- //         die();
- //     }
+  $pas= password_hash($pas, PASSWORD_DEFAULT);
+  include_once "connect_db.php";
+  try{
+    $sql = "SELECT * FROM `tbl_user` WHERE Login = '$login'";
+     $isql = $dbh->prepare($sql);
+     //$userPas=$isql->execute([$login, $pas]);
+     $isql->execute();
+     $res = $isql->fetch(PDO::FETCH_ASSOC);
+     $id=$res['Id'];
+   
+     }catch (PDOException $e) {
+         echo 'Запис не додано в базу: ' . $e->getMessage();
+         die();
+     }
 
-   if($pas=="123")
+   if($id!=null)
    {
        $_SESSION['bad_login_count']=0;
        $_SESSION['bad_login']="style='display:none;'";
        $_SESSION['bad_capt']="style='display:none;'";
        $_SESSION['bad_user']="style='display:none;'";
-      //  usera to class
+       $_SESSION['login_User']=$id;
        return true;
    }else{
        $_SESSION['bad_user']='';

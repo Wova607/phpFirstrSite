@@ -1,5 +1,6 @@
 <?php
 class UserProfile {
+public $_Id='';
 public $_name ='TestName';
 public $_surname ="TestSurname";
 public $_birdthday ="01.01.2000";
