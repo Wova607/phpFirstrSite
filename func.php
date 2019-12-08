@@ -79,4 +79,22 @@ function loginUser($login,$pas)
      return $animals;
    }
 
+   function AddPhoto()
+   {
+    $uploaddir = '/uploadIMG';
+    $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
+    if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile))
+    {
+      $path=$uploadfile;
+    }else{
+      echo $_FILES['userfile']['error'];
+    }
+   
+    
+
+    return $path;
+   }
+
+
+
 ?>

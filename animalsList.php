@@ -4,6 +4,14 @@ include "_header.php";
 include_once "func.php";
 
 $animalslist[]=AnimalsFromDB();
+
+if(isset($_POST["add"]))
+{
+  $birdthday=prepdate($_POST["birthdaytext"]);
+  $photo=AddPhoto();
+  AddAnimal($_POST["kind"], $_POST["breed"], $_POST["name"], $birdthday, $photo);
+    
+}
 ?>
 <br>
 <div class="p-t-10">
@@ -32,11 +40,12 @@ $animalslist[]=AnimalsFromDB();
                      <input class="input--style-3" type="text" placeholder="Name" name="name">
                   </div>   
                   <div class="input-group">
-                    <input class="input--style-3 js-datepicker" type="text" placeholder="Birthdate" name="birthday">
+                    <input class="input--style-3 js-datepicker" type="text" placeholder="Birthdate" name="birthdaytext">
                             <i class="zmdi  input-icon js-btn-calendar">
                             <img src=/icon/calend.png width="30" height="30">
                             </i>
                   </div>   
+                  <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
                   <div class="input-group">
                     <input class="input--style-3" type="file" placeholder="Photo" name="photo">
                   </div>   
@@ -55,8 +64,7 @@ $animalslist[]=AnimalsFromDB();
 
 </div>
 <div class="page-wrapper  font-poppins container">
-  <!-- <div class="wrapper wrapper--w780"> -->
-    <div class="card card-3">          
+     <div class="card card-3">          
       <h2 class="title" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Animals</h2>
       <table class="table">
             <thead>
@@ -87,8 +95,7 @@ $animalslist[]=AnimalsFromDB();
         </table>
 
     </div>
-  <!-- </div> -->
-</div>
+ </div>
 <?php
 include "_footer.php";
 ?>
