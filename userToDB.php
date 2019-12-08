@@ -25,9 +25,9 @@ return $newstr;
 
 
 try{
-$sql = "INSERT INTO tbl_user(Name, Surname, Birdthday, Email, Phone, City, Login, Password) VALUES (?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO tbl_user (Name, Surname, Birdthday, Email, Phone, City, Login, Password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 $isql = $dbh->prepare($sql);
-$count=$isql->execute([$name, $surname, $birdthday, $email, $phone, $login, $password]);
+$count=$isql->execute([$name, $surname, $birdthday, $email, $phone, $city, $login, $password]);
 }catch (PDOException $e) {
     echo 'Запис не додано в базу: ' . $e->getMessage();
     die();

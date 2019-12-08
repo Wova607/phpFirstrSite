@@ -19,7 +19,7 @@ function loginUser($login,$pas)
      $id=$res['Id'];
    
      }catch (PDOException $e) {
-         echo 'Запис не додано в базу: ' . $e->getMessage();
+         echo 'Користувача не знайдено в базі: ' . $e->getMessage();
          die();
      }
 
