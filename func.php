@@ -99,6 +99,20 @@ function loginUser($login,$pas)
     return $path;
    }
 
+ function Serch($text, $allAnimals)
+ {
+   $res=array();
+  for( $i=0; count($allAnimals)>$i; $i++)
+  {
+    foreach($allAnimals[$i] as $element)
+    if($element==$text)
+    {
+      array_push($res, $allAnimals[$i]);
+    }
+
+  }
+return $res;
+}
 
 
 ?>

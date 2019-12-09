@@ -3,7 +3,7 @@ session_start();
 include "_header.php";
 include_once "func.php";
 
-
+$animalslist=AnimalsFromDB();
 
 if(isset($_POST["add"]))
 {
@@ -21,8 +21,14 @@ if(isset($_POST["add"]))
   
   
   AddAnimal($_POST["kind"], $_POST["breed"], $_POST["name"], $birdthday, $photo);
-    
+  header("Location: /animalsList.php"); 
 }
+
+if(isset($_GET['search']))
+{
+  $animalslist=Serch($_GET['serchtext'], $animalslist);
+}
+
 ?>
 <br>
 <div class="p-t-10">
@@ -37,7 +43,7 @@ if(isset($_POST["add"]))
           <div class="card card-3 p-t-20 "> 
          
            <h2 class="title" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Add Animals</h2>
-          
+           
             <form method="POST" enctype="multipart/form-data">
             <div class="container">
             
@@ -75,8 +81,17 @@ if(isset($_POST["add"]))
 
 </div>
 <div class="page-wrapper  font-poppins container">
-     <div class="card card-3">          
-      <h2 class="title" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Animals</h2>
+     <div class="card card-3">  
+     <div class="row"> 
+           
+     <a href='animalsList.php' style="text-decoration: none"> <h2 class="title" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Animals</h2></a>
+     
+      <form class="form-inline mt-2 mt-md-0" method="GET">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="serchtext">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="search">Search</button>
+           </form>
+          
+      </div>
       <table class="table">
             <thead>
             <tr>
@@ -88,7 +103,7 @@ if(isset($_POST["add"]))
             </thead>
             <tbody>
             <?php
-            $animalslist=AnimalsFromDB();
+            
             
             if(count($animalslist)!=0)
             {

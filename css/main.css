@@ -530,3 +530,7 @@ input {
     background-color: #ccc;
   }
 }
+.rightForm{
+  float: right;
+
+}
