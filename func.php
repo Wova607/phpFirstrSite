@@ -48,13 +48,18 @@ function loginUser($login,$pas)
   
    function AnimalsFromDB()
    {
+    $animals=array();
     $id=$_SESSION['login_User'];
     include_once "connect_db.php";
     try{
      $sql = "SELECT * FROM `tbl_animals` WHERE UserId = '$id'";
      $isql = $dbh->prepare($sql);
      $isql->execute();
-     $animals = $isql->fetch(PDO::FETCH_ASSOC);
+     while($row = $isql->fetch(PDO::FETCH_ASSOC))
+     {
+        array_push($animals,$row);
+     }
+     
         
       }catch (PDOException $e) {
          echo 'У даного користувача тварин не знайдено в базі: ' . $e->getMessage();
@@ -76,21 +81,20 @@ function loginUser($login,$pas)
          echo 'Тварину не додано в базу: ' . $e->getMessage();
          die();
      }
-     return $animals;
+    
    }
 
-   function AddPhoto()
+   function AddPhoto($photo)
    {
-    $uploaddir = '/uploadIMG';
-    $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
-    if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile))
+    $uploaddir = '/uploadIMG';    
+    $file_name=uniqid('f_').'.jpg';
+    $uploadfile = $uploaddir . '/'.$file_name;
+    if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadfile))
     {
       $path=$uploadfile;
     }else{
-      echo $_FILES['userfile']['error'];
-    }
-   
-    
+      echo $_FILES['photo']['error'];
+    }  
 
     return $path;
    }

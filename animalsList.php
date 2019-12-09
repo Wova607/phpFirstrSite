@@ -3,12 +3,23 @@ session_start();
 include "_header.php";
 include_once "func.php";
 
-$animalslist[]=AnimalsFromDB();
+
 
 if(isset($_POST["add"]))
 {
   $birdthday=prepdate($_POST["birthdaytext"]);
-  $photo=AddPhoto();
+
+    $uploaddir = 'uploadIMG/';    
+    $file_name=uniqid('f_').'.jpg';
+    $uploadfile = $uploaddir.$file_name;
+    if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadfile))
+    {
+      $photo=$uploadfile;
+    }else{
+      echo $_FILES['photo']['error'];
+    }  
+  
+  
   AddAnimal($_POST["kind"], $_POST["breed"], $_POST["name"], $birdthday, $photo);
     
 }
@@ -77,18 +88,21 @@ if(isset($_POST["add"]))
             </thead>
             <tbody>
             <?php
-            if(count($animalslist)==0)
+            $animalslist=AnimalsFromDB();
+            
+            if(count($animalslist)!=0)
             {
+             for( $i=0; count($animalslist)>$i; $i++)
+              {
            echo '
         <tr>
-            <th scope="row">1</th>
-            <td><img src='. $animalslist["Photo"].'></td>
-            <td>' . $animalslist["Name"] . '</td>
-            <td>' . $animalslist["Bread"] . '</td>
-            <td>' . $animalslist["DateBirdth"] . '</td>
+            <td><img src='. $animalslist[$i]["Photo"].' width="100"></td>
+            <td>' . $animalslist[$i]["Name"] . '</td>
+            <td>' . $animalslist[$i]["Breed"] . '</td>
+            <td>' . $animalslist[$i]["Birdthday"] . '</td>
         </tr>
         ';}
-            
+              }
             ?>
 
             </tbody>
