@@ -1,9 +1,24 @@
 <?php
 session_start();
-include "_header.php";
+include_once "_header.php";
 include_once "func.php";
+$_SESSION['itemsInPage']=1;
+  // unset($_POST['next']);
+  // unset($_POST['prev']);  
+  // $_SESSION['pageNumb']=1;
+  // $_SESSION['firstStart']=true;
+
+$_SESSION['pages']="style='display:none'";
+
+
+if(!isset($_SESSION['pageNumb']))
+{
+  $_SESSION['pageNumb']=1;
+}
+
 
 $animalslist=AnimalsFromDB();
+$_SESSION['allAnimals']=count($animalslist);
 
 if(isset($_POST["add"]))
 {
@@ -27,6 +42,27 @@ if(isset($_POST["add"]))
 if(isset($_GET['search']))
 {
   $animalslist=Serch($_GET['serchtext'], $animalslist);
+}
+
+$_SESSION['elements']=count($animalslist);
+
+if($_SESSION['elements']>=$_SESSION['itemsInPage']) //5
+{  
+  if(!isset($_SESSION['firstStart']))
+    {$_SESSION['firstStart']=true;}
+
+  if($_SESSION['firstStart'])
+  {
+    $_SESSION['pages_end']=$_SESSION['itemsInPage'];//5
+    $_SESSION['firstStart']=false;
+  }
+  
+  $_SESSION['pages']='';
+  
+}
+else{
+  $_SESSION['pages_start']=0;
+  $_SESSION['pages_end']=$_SESSION['elements'];
 }
 
 ?>
@@ -101,13 +137,47 @@ if(isset($_GET['search']))
                 <th scope="col">Birthdate</th>
             </tr>
             </thead>
+            <tfoot <?php echo $_SESSION['pages'] ?>>
+              <tr>
+                <th></th>
+                <th></th>
+                <th>
+            <nav >
+  <ul class="pagination">
+    <form method="POST" class="form-inline">
+    <li class="page-item "><button class="page-link text-light bg-dark"  name='prev'> <<< </button></li>
+    <li class="page-item "><a class="page-link text-light bg-dark" href=""> <?php echo $_SESSION['pageNumb'] ?> </a></li>
+    <li class="page-item"><button class="page-link text-light bg-dark"  name='next'> >>> </button></li>
+    </form>
+  </ul>
+            </nav>
+            </th>
+            
+            <th></th>
+              </tr>
+            </tfoot>
             <tbody>
             <?php
+            if(isset($_POST['prev']) )
+            {
+              $_SESSION['btn']="prev";  
+              unset($_POST['prev']);                
+              include_once "pageChn.php";                         
+             echo "<script>(window.location.href='animalsList.php')()</script>";
+            }
+
+            if(isset($_POST['next']))
+            {
+              $_SESSION['btn']="next";  
+              unset($_POST['next']);                       
+              include_once "pageChn.php";                         
+              echo "<script>(window.location.href='animalsList.php')()</script>";
+            }
             
             
             if(count($animalslist)!=0)
             {
-             for( $i=0; count($animalslist)>$i; $i++)
+             for( $i=$_SESSION['pages_start']; $_SESSION['pages_end']>$i; $i++)
               {
            echo '
         <tr>
@@ -121,6 +191,7 @@ if(isset($_GET['search']))
             ?>
 
             </tbody>
+            
         </table>
 
     </div>
