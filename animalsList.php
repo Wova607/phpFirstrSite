@@ -2,15 +2,10 @@
 session_start();
 include_once "_header.php";
 include_once "func.php";
-$_SESSION['itemsInPage']=1;
-  // unset($_POST['next']);
-  // unset($_POST['prev']);  
-  // $_SESSION['pageNumb']=1;
-  // $_SESSION['firstStart']=true;
-
+$_SESSION['itemsInPage']=2;  //кіль-сть елементів на сторінці
 $_SESSION['pages']="style='display:none'";
 
-
+ 
 if(!isset($_SESSION['pageNumb']))
 {
   $_SESSION['pageNumb']=1;
@@ -18,7 +13,6 @@ if(!isset($_SESSION['pageNumb']))
 
 
 $animalslist=AnimalsFromDB();
-$_SESSION['allAnimals']=count($animalslist);
 
 if(isset($_POST["add"]))
 {
@@ -44,21 +38,25 @@ if(isset($_GET['search']))
   $animalslist=Serch($_GET['serchtext'], $animalslist);
 }
 
-$_SESSION['elements']=count($animalslist);
+$_SESSION['elements']=count($animalslist); 
 
-if($_SESSION['elements']>=$_SESSION['itemsInPage']) //5
+if($_SESSION['elements']>$_SESSION['itemsInPage']) 
 {  
   if(!isset($_SESSION['firstStart']))
     {$_SESSION['firstStart']=true;}
 
   if($_SESSION['firstStart'])
   {
-    $_SESSION['pages_end']=$_SESSION['itemsInPage'];//5
+    
     $_SESSION['firstStart']=false;
+  } 
+  if(isset($_POST['prev']) || isset($_POST['next']) )
+  {
+    //тупа заглушка бо чомусь інверсія не спрацьовує
+  }else{
+    $_SESSION['pages_end']=$_SESSION['itemsInPage'];
   }
-  
-  $_SESSION['pages']='';
-  
+  $_SESSION['pages']='';  
 }
 else{
   $_SESSION['pages_start']=0;
@@ -146,7 +144,7 @@ else{
   <ul class="pagination">
     <form method="POST" class="form-inline">
     <li class="page-item "><button class="page-link text-light bg-dark"  name='prev'> <<< </button></li>
-    <li class="page-item "><a class="page-link text-light bg-dark" href=""> <?php echo $_SESSION['pageNumb'] ?> </a></li>
+    
     <li class="page-item"><button class="page-link text-light bg-dark"  name='next'> >>> </button></li>
     </form>
   </ul>
@@ -162,16 +160,16 @@ else{
             {
               $_SESSION['btn']="prev";  
               unset($_POST['prev']);                
-              include_once "pageChn.php";                         
-             echo "<script>(window.location.href='animalsList.php')()</script>";
+              include_once "pageChn.php"; 
+               
             }
 
             if(isset($_POST['next']))
             {
               $_SESSION['btn']="next";  
               unset($_POST['next']);                       
-              include_once "pageChn.php";                         
-              echo "<script>(window.location.href='animalsList.php')()</script>";
+              include_once "pageChn.php";
+             
             }
             
             
@@ -189,7 +187,15 @@ else{
         ';}
               }
             ?>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th>
+<lable class="text-light ">Page: <?php echo $_SESSION['pageNumb'] ?> </lable>
+</th>
 
+</tr>
             </tbody>
             
         </table>

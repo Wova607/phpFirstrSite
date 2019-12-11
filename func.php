@@ -1,4 +1,5 @@
 <?php
+
 function prepdate($str)
 {
 $newstr=substr($str,strlen($str)-4,5);
@@ -11,6 +12,7 @@ return $newstr;
 
 function loginUser($login,$pas)
  {
+  include "connect_db.php";
   
   if($_SESSION['bad_login_count']>4 & $_SESSION['captText']!=$_POST["captchaText"])
   {
@@ -18,10 +20,10 @@ function loginUser($login,$pas)
     return false;
   }
   $pas= password_hash($pas, PASSWORD_DEFAULT);
-  include_once "connect_db.php";
+  
   try{
     $sql = "SELECT * FROM `tbl_user` WHERE Login = '$login'";
-     $isql = $dbh->prepare($sql);
+     $isql = $db->prepare($sql);
      $isql->execute();
      $res = $isql->fetch(PDO::FETCH_ASSOC);
      $id=$res['Id'];
@@ -48,12 +50,14 @@ function loginUser($login,$pas)
   
    function AnimalsFromDB()
    {
+    include "connect_db.php";
     $animals=array();
     $id=$_SESSION['login_User'];
-    include_once "connect_db.php";
+    
     try{
+     
      $sql = "SELECT * FROM `tbl_animals` WHERE UserId = '$id'";
-     $isql = $dbh->prepare($sql);
+     $isql = $db->prepare($sql);
      $isql->execute();
      while($row = $isql->fetch(PDO::FETCH_ASSOC))
      {
@@ -71,10 +75,11 @@ function loginUser($login,$pas)
    function AddAnimal($kind, $breed, $name, $birdthday, $photo)
    {
     $id=$_SESSION['login_User'];
-    include_once "connect_db.php";
+    include "connect_db.php";
     try{
+     
      $sql = "INSERT INTO tbl_animals(Kind, Breed, Name, Birdthday, Photo, UserId) VALUES (?, ?, ?, ?, ?, ?)";
-     $isql = $dbh->prepare($sql);
+     $isql = $db->prepare($sql);
      $isql->execute([$kind, $breed, $name, $birdthday, $photo, $id]);
             
       }catch (PDOException $e) {
